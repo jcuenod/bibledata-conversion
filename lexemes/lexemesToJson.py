@@ -9,6 +9,7 @@ yml = open(lexeme_file + ".yaml", 'r').read()
 
 data = yaml.load(yml)
 
+# filter out everything but the gloss
 for lexeme in data:
 	for key in list(data[lexeme]):
 		if key != "gloss":
