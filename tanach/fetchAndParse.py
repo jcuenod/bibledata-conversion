@@ -1,4 +1,4 @@
-import urllib.request, re
+import urllib.request, re, json
 
 books = [
 	"Genesis",
@@ -35,39 +35,54 @@ books = [
 	"Jonah",
 	"Micah",
 	"Nahum",
-	"Habbakuk",
+	"Habakkuk",
 	"Zephaniah",
 	"Haggai",
 	"Zechariah",
 	"Malachi"
 ]
 
+fileData = {}
 
-i = 0
-for book in books:
-	fileData = []
-	if i > 0:
-		continue
-	i += 1
-	response = urllib.request.urlopen("http://tanach.us/TextServer?" + book + "*&content=Accents")
+for counter, book in enumerate(books):
+	# if book != "1 Samuel":
+	# 	continue
+	url = "http://tanach.us/TextServer?" + re.sub(r"\ ", r"%20", book) + "*&content=Accents"
+	response = urllib.request.urlopen(url)
 	html = response.readlines()
-	lineNumber = 0
+	chapter = 0
+	verse = 0
+	chapterData = []
+	verseData = []
+	verseData.append(None)
 	for line in html:
 		if line[0:7] != b'\xe2\x80\xaaxxxx':
-			# if lineNumber > 10:
-			# 	continue
-			lineNumber += 1
 			line = line.decode('utf-8')
 			ref = line[0:10].split("׃")
-			if len(line) <= 20:
-				print (line)
-			else:
-				text = re.sub(r"[\u202b\u202a\u202c]", r"", line[10:])
-				text = re.sub(r"\[\d\]", r"", text).strip()
-				fileData.append({
-					"chapter": re.sub(r"[\u202b\u202a\u202c]", r"", ref[1]).strip(),
-					"verse": re.sub(r"[\u202b\u202a\u202c]", r"", ref[0]).strip(),
-					"text": text
-				})
-	print(repr(fileData))
 
+			oldChapter = chapter
+			oldVerse = verse
+			chapter = re.sub(r"[\u202b\u202a\u202c]", r"", ref[1]).strip()
+			verse = re.sub(r"[\u202b\u202a\u202c]", r"", ref[0]).strip()
+			if int(oldChapter) != int(chapter) and int(oldChapter) != 0:
+				chapter_name = book.lower() + "_" + '{0:03d}'.format(int(oldChapter))
+				fileData[chapter_name] = {
+					"verses": verseData
+				}
+				verseData = []
+				verseData.append(None)
+
+			text = re.sub(r"[\u202b\u202a\u202c]", r"", line[10:])
+			text = re.sub(r"\[\d\]", r"", text).strip()
+			verseData.append({
+				"verse": re.sub(r"[\u202b\u202a\u202c]", r"", ref[0]).strip(),
+				"wlc": text
+			})
+	chapter_name = book.lower() + "_" + '{0:03d}'.format(int(chapter))
+	fileData[chapter_name] = {
+		"verses": verseData
+	}
+	print(book)
+
+with open("firetranslate_wlc.json", 'w', encoding='utf-8') as outfile:
+	json.dump(fileData, outfile, separators=(',',':'), ensure_ascii=False)
