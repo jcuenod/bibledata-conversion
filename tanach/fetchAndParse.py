@@ -44,6 +44,9 @@ books = [
 
 fileData = {}
 
+def generate_chapter_name(book, chapter):
+	return book.lower().replace(" ", "") + "_" + '{0:03d}'.format(int(chapter))
+
 for counter, book in enumerate(books):
 	# if book != "1 Samuel":
 	# 	continue
@@ -65,7 +68,7 @@ for counter, book in enumerate(books):
 			chapter = re.sub(r"[\u202b\u202a\u202c]", r"", ref[1]).strip()
 			verse = re.sub(r"[\u202b\u202a\u202c]", r"", ref[0]).strip()
 			if int(oldChapter) != int(chapter) and int(oldChapter) != 0:
-				chapter_name = book.lower() + "_" + '{0:03d}'.format(int(oldChapter))
+				chapter_name = generate_chapter_name(book, oldChapter)
 				fileData[chapter_name] = {
 					"verses": verseData
 				}
@@ -78,7 +81,7 @@ for counter, book in enumerate(books):
 				"verse": re.sub(r"[\u202b\u202a\u202c]", r"", ref[0]).strip(),
 				"wlc": text
 			})
-	chapter_name = book.lower() + "_" + '{0:03d}'.format(int(chapter))
+	chapter_name = generate_chapter_name(book, chapter)
 	fileData[chapter_name] = {
 		"verses": verseData
 	}
