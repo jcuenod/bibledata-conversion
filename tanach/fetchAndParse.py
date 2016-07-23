@@ -57,7 +57,6 @@ for counter, book in enumerate(books):
 	verse = 0
 	chapterData = []
 	verseData = []
-	verseData.append(None)
 	for line in html:
 		if line[0:7] != b'\xe2\x80\xaaxxxx':
 			line = line.decode('utf-8')
@@ -73,7 +72,6 @@ for counter, book in enumerate(books):
 					"verses": verseData
 				}
 				verseData = []
-				verseData.append(None)
 
 			text = re.sub(r"[\u202b\u202a\u202c]", r"", line[10:])
 			text = re.sub(r"\[\d\]", r"", text).strip()
