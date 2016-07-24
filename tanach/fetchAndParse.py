@@ -1,4 +1,8 @@
-import urllib.request, re, json
+import urllib.request
+import os
+import re
+import json
+import shutil
 
 books = [
 	"Genesis",
@@ -44,20 +48,29 @@ books = [
 
 fileData = {}
 
+
+def downloadAndSave(url, file_name):
+	with urllib.request.urlopen(url) as response, open(file_name, 'wb') as out_file:
+		shutil.copyfileobj(response, out_file)
+
+def getBookFile(book_name):
+	path = "tanach_files/" + book_name + ".json"
+	if not os.path.isfile(path):
+		url = "http://tanach.us/TextServer?" + re.sub(r"\ ", r"%20", book) + "*&content=Accents"
+		downloadAndSave(url, path)
+	response = urllib.request.urlopen("file:" + path)
+	return response.readlines()
+
 def generate_chapter_name(book, chapter):
 	return book.lower().replace(" ", "") + "_" + '{0:03d}'.format(int(chapter))
 
 for counter, book in enumerate(books):
-	# if book != "1 Samuel":
-	# 	continue
-	url = "http://tanach.us/TextServer?" + re.sub(r"\ ", r"%20", book) + "*&content=Accents"
-	response = urllib.request.urlopen(url)
-	html = response.readlines()
+	book_file_lines = getBookFile(book)
 	chapter = 0
 	verse = 0
 	chapterData = []
 	verseData = []
-	for line in html:
+	for line in book_file_lines:
 		if line[0:7] != b'\xe2\x80\xaaxxxx':
 			line = line.decode('utf-8')
 			ref = line[0:10].split("׃")
