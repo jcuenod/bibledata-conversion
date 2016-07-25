@@ -1,19 +1,22 @@
 from os import listdir
 from os.path import isfile, join
 import re
+import pprint
 
 mypath = "../lxxproject/files/"
-
-
 lxxfiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
 
-sequence_match = [
-	r'.{25}RA',
-	r'.{25}RA  G',
-	r'.*',
-	r'.{36}UI\(O/S',
-]
+sequences_to_match = {
+	# This search was for finding similar constructions to the title formula in Zech 1:1
+	"article_genArticle_anything_uios": [
+		r'.{25}RA',
+		r'.{25}RA  G',
+		r'.*',
+		r'.{36}UI\(O/S',
+	]
+}
 
+sequence_match = sequences_to_match["article_genArticle_anything_uios"]
 matches = []
 ref = ""
 
@@ -37,4 +40,5 @@ for lxxfile in lxxfiles:
 				tmpMatch = []
 				sequence_counter = 0
 
-print(repr(matches))
+pp = pprint.PrettyPrinter()
+pp.pprint(matches)
