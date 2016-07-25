@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 import re
 
-mypath = "files"
+mypath = "../lxxproject/files/"
 
 
 lxxfiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
@@ -20,7 +20,7 @@ ref = ""
 for lxxfile in lxxfiles:
 	tmpMatch = []
 	sequence_counter = 0
-	lines = [line.rstrip('\n') for line in open('files/' + lxxfile)]
+	lines = [line.rstrip('\n') for line in open(mypath + lxxfile)]
 	for line in lines:
 		if re.match(".+ .+:.+", line) or re.match(".+ [1-9]+", line):
 			ref = line
