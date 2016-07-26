@@ -32,10 +32,18 @@ sequences_to_match = {
 		r'.{25}RA  G',
 		r'.*',
 		r'.{36}UI\(O/S',
+	],
+	# same as above but search for proper noun (it will be capitalised) and no uios (but show next line)
+	"article_genArticle_properNoun": [
+		r'.{25}RA',
+		r'.{25}RA  G',
+		r'\*.*',
+		r'.*',
+		r'.*',
 	]
 }
 
-sequence_match = sequences_to_match["article_genArticle_anything_uios"]
+sequence_match = sequences_to_match["article_genArticle_properNoun"]
 matches = []
 ref = ""
 
