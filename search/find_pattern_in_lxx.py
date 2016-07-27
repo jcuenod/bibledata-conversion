@@ -68,7 +68,7 @@ for lxxfile in lxxfiles:
 				match_line = v.strip()
 				match_line_highlight = match_line[:match_line.index(do_print)] + color.GREEN + do_print + color.END + match_line[match_line.index(do_print) + len(do_print):]
 				print (color.BOLD + ref + color.END)
-				print (match_line_highlight)
+				print (match_line_highlight + "\n")
 				do_print = ""
 			ref = line
 			v = "";
