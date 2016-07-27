@@ -40,17 +40,16 @@ def get_unicode_word(wordInBetacode):
 sequences_to_match = {
 	# This search was for finding similar constructions to the title formula in Zech 1:1
 	"article_genArticle_anything_uios": [
-		r'.{25}RA',
-		r'.{25}RA  G',
-		r'.*',
-		r'.{36}UI\(O/S',
+		r'.{25}RA',			# Article
+		r'.{25}RA  G',		# Genitive Article
+		r'.*',				# Anything
+		r'.{36}UI\(O/S',	# Any form of uios
 	],
 	# same as above but search for proper noun (it will be capitalised) and no uios (but show next line)
 	"article_genArticle_properNoun": [
-		r'.{25}RA',
-		r'.{25}RA  G',
-		r'\*.*',
-		r'.{25}RA  G',
+		r'.{25}RA',			# Article
+		r'.{25}RA  G',		# Genitive Article
+		r'\*.*',			# Capitalised Word in Text
 	]
 }
 
