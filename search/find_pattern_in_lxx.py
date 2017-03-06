@@ -50,10 +50,19 @@ sequences_to_match = {
 		r'.{25}RA',			# Article
 		r'.{25}RA  G',		# Genitive Article
 		r'\*.*',			# Capitalised Word in Text
-	]
+	],
+	"pheugoAndThenAnything": [
+		r'.{36}FEU/GW.*',		# Occurrence of photizo
+	],
+	"photizo": [
+		r'.{36}FWTI/ZW',		# Occurrence of photizo
+	],
+	"blind": [
+		r'.{36}TUFLO/W',		# Occurrence of tuflow
+	],
 }
 
-sequence_match = sequences_to_match["article_genArticle_properNoun"]
+sequence_match = sequences_to_match["blind"]
 matches = []
 ref = ""
 do_print = ""
@@ -66,7 +75,11 @@ for lxxfile in lxxfiles:
 		if re.match(".+ .+:.+", line) or re.match(".+ [1-9]+", line):
 			if do_print != "":
 				match_line = v.strip()
-				match_line_highlight = match_line[:match_line.index(do_print)] + color.GREEN + do_print + color.END + match_line[match_line.index(do_print) + len(do_print):]
+				match_line_highlight = match_line[:match_line.index(do_print)] + \
+							color.GREEN + \
+							do_print + \
+							color.END + \
+							match_line[match_line.index(do_print) + len(do_print):]
 				print (color.BOLD + ref + color.END)
 				print (match_line_highlight + "\n")
 				do_print = ""
@@ -89,7 +102,7 @@ for lxxfile in lxxfiles:
 				# matches.append({ref: convertArrayOfLinesFromBetaToUnicode(tmpMatch)})
 				tmpMatch = []
 				sequence_counter = 0
-				do_print = match_string
+				do_print = match_string.strip()
 
 # pp = pprint.PrettyPrinter()
 # pp.pprint(matches)
